@@ -1,0 +1,86 @@
+#!/bin/bash
+#Kevin Nguyen
+
+#Set the number after highlow to be the range
+n=$1
+
+#Rules for HighLow and for Cheating
+echo -e "The Rules of This Game are:\nThink of a Number between 1 to the desired range\nI will give a guess and you will input whether it is:\nToo High(h) or Too Low(l) or Correct(c)\nThe Game will continue until the number is guessed\n\nFor CHEATING:\nThe Game will record the highest and lowest possible numbers\nIf the Game is indicated that the guess was too high but is lower than the lowest possible value or the guess was too low but is higher than the highest possible value\nThen the Game will be concluded."
+
+#If no number after highlow, then the program will set the range to 100
+if [[ $n -eq 0 ]]
+then
+	n=100
+fi
+
+#Give User time to think of a number and enter when ready
+echo -e "Think of a number between 1 to $n: (ENTER when ready)\n"
+echo ""
+read
+
+#Set Correct as parameter to end the while loop
+correct=0
+#Set Guess as the highest n
+guess=$n
+#Set HIGH as the highest n
+HIGH=$n
+#Set LOW as the lowest
+LOW=1
+#Set i to 0 as counter
+i=1
+
+
+#While Loop to determine number
+while [[ $guess -ne $correct ]]
+do	
+	
+	guess=$((($HIGH+$LOW)/2))
+	#Begins with inital guess as highest number
+	echo -e "My guess: $guess\n Too High (h) Too Low (l) or Correct (c)\n"
+	#Reads higher, lower, or correct
+	read -n 1 input
+	echo -e "\n"
+	
+	#Set Guess to Average of the High and Low
+	
+	#If the Input was Too High
+	if [[ $input == "h" ]]
+	then
+		#Set HIGH to GUESS-1
+		HIGH=$(($guess-1))
+		#Increment the counter i
+		i=$(($i+1))
+
+	#If the Input was Too Low
+	elif [[ $input == "l" ]]
+	then
+		#Set LOW to GUESS+1
+		LOW=$(($guess+1))
+		#Increment the counter i
+		i=$(($i+1))
+
+	#If the Input was Correct
+	elif [[ $input == "c" ]]
+	then
+		#Print how many turns and end the while loop	
+		echo -e "It took: $i turns to get $guess\n"
+		guess=$correct
+	
+	#If input was invalid, print this and continue
+	else
+		echo -e "Please Enter (h), (l), or (c)\n"
+	
+	#End of if-elif-else statement
+	fi
+	
+	#For Cheating, if the Lowest is greater than Highest Possible
+	if [[ $LOW -gt $HIGH ]]
+	then
+		echo -e "Cheating was Detected. Game Has Ended.\n"
+		guess=$correct
+	fi
+
+
+done
+
+
